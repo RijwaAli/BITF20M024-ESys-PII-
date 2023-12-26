@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard</title>
+  <style>
+    .tile {
+      width: 200px;
+      height: 100px;
+      margin: 10px;
+      padding: 10px;
+      display: inline-block;
+    }
+    .green { background-color: green; }
+    .red { background-color: red; }
+    .chart-container {
+      width: 400px;
+      height: 300px;
+      margin: 10px;
+    }
+    .activity-list {
+      margin: 10px;
+    }
+  </style>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+
+  <div id="topInterests" class="tile green">Top 5 Interests</div>
+  <div id="bottomInterests" class="tile red">Bottom 5 Interests</div>
+  <div id="distinctInterests" class="tile">Distinct Interests</div>
+
+  <div id="provincialDistribution" class="chart-container">
+    <canvas id="provincialChart"></canvas>
+  </div>
+
+  <div id="submissionChart" class="chart-container">
+    <canvas id="submissionLineChart"></canvas>
+  </div>
+
+  <div id="ageDistribution" class="chart-container">
+    <canvas id="ageBarChart"></canvas>
+  </div>
+
+  <div id="studentsStatusGrid">
+    <!-- Display student status grid here -->
+  </div>
+
+  <div id="mostActiveHours" class="activity-list">
+    <!-- Display most active hours here -->
+  </div>
+
+  <div id="leastActiveHours" class="activity-list">
+    <!-- Display least active hours here -->
+  </div>
+
+  <div id="deadHours" class="activity-list">
+    <!-- Display dead hours here -->
+  </div>
+
+  <script>
+    // Dummy data for charts (replace with your actual data)
+    const topInterestsData = ['Interest A', 'Interest B', 'Interest C', 'Interest D', 'Interest E'];
+    const bottomInterestsData = ['Interest X', 'Interest Y', 'Interest Z', 'Interest W', 'Interest V'];
+    const distinctInterestsData = 20;
+
+    const provincialData = {
+      labels: ['Province A', 'Province B', 'Province C'],
+      datasets: [{
+        data: [30, 40, 30],
+        backgroundColor: ['red', 'green', 'blue'],
+      }]
+    };
+
+    const submissionChartData = {
+      labels: ['Day 1', 'Day 2', 'Day 3'],
+      datasets: [{
+        label: 'Students Created',
+        data: [10, 20, 15],
+        borderColor: 'blue',
+        fill: false,
+      }]
+    };
+
+    const ageChartData = {
+      labels: ['18-25', '26-35', '36-45'],
+      datasets: [{
+        label: 'Number of Students',
+        data: [15, 30, 20],
+        backgroundColor: ['red', 'green', 'blue'],
+      }]
+    };
+
+    // Initialize charts
+    const provincialChart = new Chart(document.getElementById('provincialChart').getContext('2d'), {
+      type: 'pie',
+      data: provincialData,
+    });
+
+    const submissionLineChart = new Chart(document.getElementById('submissionLineChart').getContext('2d'), {
+      type: 'line',
+      data: submissionChartData,
+    });
+
+    const ageBarChart = new Chart(document.getElementById('ageBarChart').getContext('2d'), {
+      type: 'bar',
+      data: ageChartData,
+    });
+
+    // Your logic for dynamic updates and other features here
+  </script>
+</body>
+</html>

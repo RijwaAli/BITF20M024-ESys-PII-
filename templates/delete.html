@@ -1,0 +1,49 @@
+<!-- deleteConfirmation.html -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Delete Student Confirmation</title>
+     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap">
+    <link rel="stylesheet" href="/static/css files/delete.css">
+</head>
+<body>
+    <h1>Delete Student Confirmation</h1>
+
+    <p>Are you sure you want to delete this student?</p>
+
+
+    <button onclick="confirmDelete()">Confirm Delete</button>
+    <button onclick="cancelDelete()">Cancel</button>
+
+    <script>
+        function confirmDelete() {
+            // Assuming you want to make an AJAX request to delete the student on the server
+            var studentId = getStudentIdFromUrl(); // Retrieve studentId from the URL
+
+            // Here, we are using a simulated asynchronous delay with setTimeout
+            setTimeout(function() {
+                // Simulate successful deletion
+                alert('Student deleted successfully!');
+                // Redirect to the StudentList page
+                window.location.href = '/studentList';
+            }, 1000); // Simulated delay of 1 second
+        }
+
+        function cancelDelete() {
+            // If the user cancels, you can redirect them back to the StudentList page or another appropriate page
+            window.location.href = '/studentList'; // Redirect to the StudentList page
+        }
+
+        function getStudentIdFromUrl() {
+            // Extract studentId from the URL
+            // For example, if the URL is "/deleteConfirmation/123", this will return 123
+            var urlParts = window.location.pathname.split('/');
+            return urlParts[urlParts.length - 1];
+        }
+    </script>
+</body>
+</html>

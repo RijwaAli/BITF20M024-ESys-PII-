@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Interest System - Dashboard</title>
+    <!-- Include Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="static/css files/studentList.css">
+</head>
+<body>
+
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <a class="navbar-brand" href="#">Student Interest System</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav">
+            <li class="nav-item active">
+                <a class="nav-link" href="/dashboard">Dashboard</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/addStudent">Add Student</a>
+            </li>
+        </ul>
+    </div>
+</nav>
+
+<div class="container mt-4">
+    <h2>Student List</h2>
+    <div class="row mb-3">
+            <div class="col-md-6">
+                <label for="pageSizeDropdown">Page Size:</label>
+                <select id="pageSizeDropdown" class="form-control" onchange="changePageSize()">                    <option value="" disabled selected>Select an option</option>
+                    <option value="5">5</option>
+                    <option value="10" selected>10</option>
+                    <option value="20">20</option>
+
+                </select>
+            </div>
+            <div class="col-md-6">
+                <label for="pageNavigator">Page:</label>
+                <button onclick="goToFirstPage()">&lt;&lt;</button>
+                <button onclick="goToPreviousPage()">&lt;</button>
+                <span id="currentPage"></span>
+                <span>page 1 of 21</span>
+                <span id="totalPages"></span>
+                <button onclick="goToNextPage()">&gt;</button>
+                <button onclick="goToLastPage()">&gt;  &gt;</button>
+            </div>
+        </div>
+    <table class="table" id="studentTable">
+        <thead>
+            <tr>
+                <th>Full Name</th>
+                <th>Roll Number</th>
+                <th>Email Address</th>
+                <th>Gender</th>
+                <th>Date of Birth</th>
+                <th>City</th>
+                <th>Interest</th>
+                <th>Department</th>
+                <th>Degree Title</th>
+                <th>Subject</th>
+                <th>Start Date</th>
+                <th>End Date</th>
+                <th>Actions</th> <!-- New column for actions -->
+            </tr>
+        </thead>
+
+    </table>
+</div>
+
+<!-- Include jQuery and DataTables JS -->
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+<script src="https://cdn.datatables.net/1.10.24/js/jquery.dataTables.js"></script>
+
+<!-- Other scripts remain the same -->
+
+<script>
+    // Mock data for demonstration
+    var mockData = [
+        {
+            "id": 1,
+            "full_name": "John Doe",
+            "roll_number": "2021001",
+            "email": "john@example.com",
+            "gender": "Male",
+            "dob": "1995-01-15",
+            "city": "New York",
+            "interest": "Programming",
+            "department": "IT",
+            "degree_title": "Bachelors Degree",
+            "subject": "Computer Science",
+            "start_date": "2021-09-01",
+            "end_date": "2025-05-30"
+        },
+        {
+            "id": 2,
+            "full_name": "Jane Doe",
+            "roll_number": "2021002",
+            "email": "jane@example.com",
+            "gender": "Female",
+            "dob": "1998-03-20",
+            "city": "San Francisco",
+            "interest": "Data Science",
+            "department": "Computer Science",
+            "degree_title": "Master's Degree",
+            "subject": "Machine Learning",
+            "start_date": "2022-01-15",
+            "end_date": "2024-12-31"
+        },
+        {
+            "id": 3,
+            "full_name": "Bob Smith",
+            "roll_number": "2021003",
+            "email": "bob@example.com",
+            "gender": "Male",
+            "dob": "1990-08-05",
+            "city": "Los Angeles",
+            "interest": "Graphic Design",
+            "department": "Art",
+            "degree_title": "Bachelor of Fine Arts",
+            "subject": "Digital Art",
+            "start_date": "2021-06-01",
+            "end_date": "2025-05-30"
+        },
+        {
+            "id": 4,
+            "full_name": "Alice Johnson",
+            "roll_number": "2021004",
+            "email": "alice@example.com",
+            "gender": "Female",
+            "dob": "1993-12-10",
+            "city": "Chicago",
+            "interest": "Music",
+            "department": "Music",
+            "degree_title": "Bachelor of Music",
+            "subject": "Piano",
+            "start_date": "2021-09-01",
+            "end_date": "2024-08-31"
+        },
+        {
+            "id": 5,
+            "full_name": "Michael Johnson",
+            "roll_number": "2021005",
+            "email": "michael@example.com",
+            "gender": "Male",
+            "dob": "1994-06-25",
+            "city": "Seattle",
+            "interest": "Physics",
+            "department": "Science",
+            "degree_title": "Bachelor of Science",
+            "subject": "Quantum Mechanics",
+            "start_date": "2021-10-01",
+            "end_date": "2024-09-30"
+        },
+        {
+            "id": 6,
+            "full_name": "Emily Wilson",
+            "roll_number": "2021006",
+            "email": "emily@example.com",
+            "gender": "Female",
+            "dob": "1997-02-18",
+            "city": "Boston",
+            "interest": "Environmental Science",
+            "department": "Environmental Science",
+            "degree_title": "Bachelor of Environmental Science",
+            "subject": "Climate Change",
+            "start_date": "2022-03-15",
+            "end_date": "2025-03-14"
+        },
+        {
+            "id": 7,
+            "full_name": "David Lee",
+            "roll_number": "2021007",
+            "email": "david@example.com",
+            "gender": "Male",
+            "dob": "1996-09-08",
+            "city": "Austin",
+            "interest": "Marketing",
+            "department": "Business",
+            "degree_title": "Bachelor of Business Administration",
+            "subject": "Digital Marketing",
+            "start_date": "2021-12-01",
+            "end_date": "2024-11-30"
+        },
+        {
+            "id": 8,
+            "full_name": "Emma Watson",
+            "roll_number": "2021008",
+            "email": "emma@example.com",
+            "gender": "Female",
+            "dob": "1994-04-15",
+            "city": "London",
+            "interest": "Acting",
+            "department": "Arts",
+            "degree_title": "Bachelor of Fine Arts",
+            "subject": "Drama",
+            "start_date": "2021-09-01",
+            "end_date": "2025-05-30"
+        },
+        {
+            "id": 9,
+            "full_name": "Chris Evans",
+            "roll_number": "2021009",
+            "email": "chris@example.com",
+            "gender": "Male",
+            "dob": "1981-06-13",
+            "city": "Los Angeles",
+            "interest": "Filmmaking",
+            "department": "Film",
+            "degree_title": "Master's Degree",
+            "subject": "Directing",
+            "start_date": "2022-01-15",
+            "end_date": "2024-12-31"
+        },
+        {
+            "id": 10,
+            "full_name": "Ariana Grande",
+            "roll_number": "2021010",
+            "email": "ariana@example.com",
+            "gender": "Female",
+            "dob": "1993-06-26",
+            "city": "New York",
+            "interest": "Music",
+            "department": "Music",
+            "degree_title": "Bachelor of Music",
+            "subject": "Pop Singing",
+            "start_date": "2021-09-01",
+            "end_date": "2024-08-31"
+        },
+        {
+            "id": 11,
+            "full_name": "Tom Holland",
+            "roll_number": "2021011",
+            "email": "tom@example.com",
+            "gender": "Male",
+            "dob": "1996-06-01",
+            "city": "London",
+            "interest": "Acting",
+            "department": "Arts",
+            "degree_title": "Bachelor of Fine Arts",
+            "subject": "Film Acting",
+            "start_date": "2022-03-15",
+            "end_date": "2025-03-14"
+        },
+        {
+            "id": 12,
+            "full_name": "Selena Gomez",
+            "roll_number": "2021012",
+            "email": "selena@example.com",
+            "gender": "Female",
+            "dob": "1992-07-22",
+            "city": "Los Angeles",
+            "interest": "Music",
+            "department": "Music",
+            "degree_title": "Bachelor of Music",
+            "subject": "Pop Music",
+            "start_date": "2021-12-01",
+            "end_date": "2024-11-30"
+        },
+        {
+            "id": 13,
+            "full_name": "Robert Downey Jr.",
+            "roll_number": "2021013",
+            "email": "robert@example.com",
+            "gender": "Male",
+            "dob": "1965-04-04",
+            "city": "Malibu",
+            "interest": "Acting",
+            "department": "Film",
+            "degree_title": "Master's Degree",
+            "subject": "Film Production",
+            "start_date": "2021-10-01",
+            "end_date": "2024-09-30"
+        }
+    ];
+  $(document).ready(function () {
+        var table = $('#studentTable').DataTable({
+            "data": mockData,
+            "columns": [
+                { "data": "full_name" },
+                { "data": "roll_number" },
+                { "data": "email" },
+                { "data": "gender" },
+                { "data": "dob" },
+                { "data": "city" },
+                { "data": "interest" },
+                { "data": "department" },
+                { "data": "degree_title" },
+                { "data": "subject" },
+                { "data": "start_date" },
+                { "data": "end_date" },
+                {
+                    "data": null,
+                    "render": function (data, type, row) {
+                        return '<button class="btn btn-primary btn-sm" onclick="viewStudent(' + row.id + ')">View</button>' +
+                               '<button class="btn btn-warning btn-sm" onclick="editStudent(' + row.id + ')">Edit</button>' +
+                               '<button class="btn btn-danger btn-sm" onclick="deleteStudent(' + row.id + ')">Delete</button>';
+                    }
+                }
+            ]
+        });
+    });
+
+    function viewStudent(studentId) {
+        // Redirect to the view student page
+        window.location.href = '/viewStudent/' + studentId;
+    }
+    function editStudent(studentId) {
+        // Assuming you want to display an alert for the edit action
+        alert('Edit Student with ID: ' + studentId);
+    }
+
+    function deleteStudent(studentId) {
+        // Assuming you want to display a confirmation prompt for the delete action
+        var confirmDelete = confirm('Are you sure you want to delete Student with ID: ' + studentId + '?');
+
+        if (confirmDelete) {
+            // Implement actual delete logic here
+            alert('Deleting Student with ID: ' + studentId);
+        }
+    }
+
+    function changePageSize() {
+        pageSize = parseInt(document.getElementById("pageSizeDropdown").value);
+        currentPage = 1;
+        totalPages = Math.ceil(mockData.length / pageSize);
+        updatePagination();
+        updateTable();
+    }
+
+    function goToFirstPage() {
+        currentPage = 1;
+        updatePagination();
+        updateTable();
+    }
+
+    function goToPreviousPage() {
+        if (currentPage > 1) {
+            currentPage--;
+            updatePagination();
+            updateTable();
+        }
+    }
+
+    function goToNextPage() {
+        if (currentPage < totalPages) {
+            currentPage++;
+            updatePagination();
+            updateTable();
+        }
+    }
+
+    function goToLastPage() {
+        currentPage = totalPages;
+        updatePagination();
+        updateTable();
+    }
+
+    function updatePagination() {
+        document.getElementById("currentPage").innerHTML = currentPage;
+        document.getElementById("totalPages").innerHTML = totalPages;
+    }
+
+    function updateTable() {
+        // You may need to modify this function based on your actual implementation
+        // This is a placeholder for updating the table content
+        console.log("Updating table for page: " + currentPage + ", pageSize: " + pageSize);
+    }
+</script>
+</body>
+</html>
