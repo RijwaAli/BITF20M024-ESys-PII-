@@ -9,15 +9,7 @@ pipeline {
             }
         }
 
-        stage('Build') {
-            steps {
-                // Use Maven tool configured in Jenkins
-                withMaven(maven: 'MAVEN_HOME') {
-                    // Run Maven commands
-                    bat "mvn clean"
-                }
-            }
-        }
+    
     }
 
     post {
