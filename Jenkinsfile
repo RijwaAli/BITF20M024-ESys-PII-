@@ -8,13 +8,21 @@ pipeline {
                 checkout scm
             }
         }
+        stage('Build'){
+            sh 'mvn clean install'
+        }
         
         stage('Test') {
             steps {
                 // Add your test steps here
                 echo 'Running tests...'
                 // You can add more steps such as running test commands, executing test scripts, etc.
+                sh 'mvn test'
             }
+        }
+        stage('Deploy')
+        {
+            sh 'deploy.sh'
         }
     }
 
