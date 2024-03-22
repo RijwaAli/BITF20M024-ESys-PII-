@@ -5,30 +5,24 @@ pipeline {
         stage('Checkout') {
             steps {
                 // Checkout the code from the GitHub repository
-                git 'https://github.com/RijwaAli/BITF20M024-ESys-PII-.git'
+                git branch: 'main', url: 'https://github.com/RijwaAli/BITF20M024-ESys-PII-.git'
             }
         }
         
         stage('Build') {
             steps {
                 // Build your project (replace 'mvn clean install' with your actual build command)
-                sh 'mvn clean install'
+                bat 'clean 
             }
         }
         
         stage('Test') {
             steps {
                 // Run your tests (replace 'mvn test' with your actual test command)
-                sh 'mvn test'
+                bat 'test'
             }
         }
         
-        stage('Deploy') {
-            steps {
-                // Deploy your application (replace this with your actual deployment steps)
-                sh 'echo "Deploying the application"'
-            }
-        }
     }
     
     post {
