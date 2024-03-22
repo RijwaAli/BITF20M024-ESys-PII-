@@ -9,7 +9,7 @@ pipeline {
             }
         }
         stage('Build'){
-            sh 'mvn clean install'
+            bat 'mvn clean install'
         }
         
         stage('Test') {
@@ -17,13 +17,11 @@ pipeline {
                 // Add your test steps here
                 echo 'Running tests...'
                 // You can add more steps such as running test commands, executing test scripts, etc.
-                sh 'mvn test'
+                bat 'mvn test'
             }
         }
-        stage('Deploy')
-        {
-            sh 'deploy.sh'
-        }
+        
+        
     }
 
     post {
