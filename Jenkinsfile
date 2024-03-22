@@ -10,17 +10,39 @@ pipeline {
         }
         
         stage('Build') {
+           pipeline {
+    agent any
+    
+    stages {
+        stage('Build') {
             steps {
-                // Build your project (replace 'mvn clean install' with your actual build command)
-                bat 'clean 
+                // Clean the workspace
+                bat 'mvn clean'
+                
+                // Compile and test the project
+                bat 'mvn test'
             }
         }
+    }
+    
+    post {
+        always {
+            // Clean up or perform any other necessary actions after the pipeline execution
+            echo 'Pipeline execution completed'
+        }
         
-        stage('Test') {
-            steps {
-                // Run your tests (replace 'mvn test' with your actual test command)
-                bat 'test'
-            }
+        success {
+            // Actions to perform when the pipeline succeeds
+            echo 'Pipeline succeeded!'
+        }
+        
+        failure {
+            // Actions to perform when the pipeline fails
+            echo 'Pipeline failed!'
+        }
+    }
+}
+
         }
         
     }
