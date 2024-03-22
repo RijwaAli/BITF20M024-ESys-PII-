@@ -1,32 +1,28 @@
 pipeline {
     agent any
-    
+
     stages {
+        stage('Checkout SCM') {
+            steps {
+                // Checkout SCM steps
+                checkout scm
+            }
+        }
+
         stage('Build') {
             steps {
-                // Clean the workspace
-                bat 'mvn clean'
-                
-                // Compile and test the project
-                bat 'mvn test'
+                // Use Maven tool configured in Jenkins
+                withMaven(maven: 'Maven 3.9.6') {
+                    // Run Maven commands
+                    bat "mvn clean"
+                }
             }
         }
     }
-    
+
     post {
         always {
-            // Clean up or perform any other necessary actions after the pipeline execution
             echo 'Pipeline execution completed'
-        }
-        
-        success {
-            // Actions to perform when the pipeline succeeds
-            echo 'Pipeline succeeded!'
-        }
-        
-        failure {
-            // Actions to perform when the pipeline fails
-            echo 'Pipeline failed!'
         }
     }
 }
